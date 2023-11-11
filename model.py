@@ -20,48 +20,49 @@ def initialize_model(Pytorch_file_path):
 
     # This is a TinyVGG Architecture.
     # Details of this architecture can be found at : https://poloclub.github.io/cnn-explainer/
-    class TinyVGG(nn.Module):
-        def __init__(self,
-                    in_features,
-                    out_features,
-                    hidden_units):
+    class MNIST_CNN(nn.Module):
+        def __init__(self, input_shape, hidden_units, output_shape):
             super().__init__()
             self.conv_block_1 = nn.Sequential(
-                nn.Conv2d(in_channels=in_features,
-                                    out_channels=hidden_units,
-                                    kernel_size=3,
-                                    padding=1,
-                                    stride=1),
+                nn.Conv2d(in_channels=input_shape,
+                          out_channels=hidden_units,
+                          kernel_size=3,
+                          stride=1,
+                          padding=1),
                 nn.ReLU(),
                 nn.Conv2d(in_channels=hidden_units,
-                        out_channels=hidden_units,
-                        kernel_size=2,
-                        padding=1),
+                          out_channels=hidden_units,
+                          kernel_size=3,
+                          stride=1,
+                          padding=1),
                 nn.ReLU(),
                 nn.MaxPool2d(kernel_size=2)
             )
             self.conv_block_2 = nn.Sequential(
                 nn.Conv2d(in_channels=hidden_units,
-                        out_channels=hidden_units,
-                        kernel_size=3,
-                        stride=1,
-                        padding=1),
+                          out_channels=hidden_units,
+                          kernel_size=3,
+                          stride=1,
+                          padding=1),
+                nn.ReLU(),
+                nn.Conv2d(in_channels=hidden_units,
+                          out_channels=hidden_units,
+                          kernel_size=3,
+                          stride=1,
+                          padding=1),
                 nn.ReLU(),
                 nn.MaxPool2d(kernel_size=2)
             )
             self.classifier = nn.Sequential(
                 nn.Flatten(),
-                # We need to change this in_features below
-                nn.Linear(in_features=7*7*hidden_units,  # This is a hardcoded value. 
-                                            #The error in the dummy_x gives us the info for this
-                        out_features=out_features)
+                nn.Linear(in_features=hidden_units*7*7,
+                          out_features=output_shape)
             )
-
-        def forward(self, X):
-            X = self.conv_block_1(X)
-            X = self.conv_block_2(X)
-            X = self.classifier(X)
-            return (X)
+        def forward(self, x):
+            x=self.conv_block_1(x)
+            x=self.conv_block_2(x)
+            x=self.classifier(x)
+            return x
 
     # Instantiate the model
     model = TinyVGG(in_features=1,
