@@ -65,7 +65,7 @@ if image_data is not None:
                 
                 # Predict the digit of the model
                 y_logits = model(transformed_image)
-                y_pred_prob = torch.softmax(y_logits)
+                y_pred_prob = torch.softmax(y_logits, dim=1)
                 
                 conf = torch.max(y_pred_prob).item()*100
                 digit = str(torch.argmax(y_pred_prob).item())
