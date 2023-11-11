@@ -65,8 +65,8 @@ def initialize_model(Pytorch_file_path):
             return x
 
     # Instantiate the model
-    model = MNIST_CNN(in_features=1,
-                        out_features=10,
+    model = MNIST_CNN(input_shape=1,
+                        output_shape=10,
                         hidden_units=10).to(device)
     
     # Load the Weights
