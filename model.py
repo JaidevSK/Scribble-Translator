@@ -20,7 +20,7 @@ def initialize_model(Pytorch_file_path):
 
     # This is a TinyVGG Architecture.
     # Details of this architecture can be found at : https://poloclub.github.io/cnn-explainer/
-    class MNIST_CNN(nn.Module):
+    class TinyVGG(nn.Module):
         def __init__(self, input_shape, hidden_units, output_shape):
             super().__init__()
             self.conv_block_1 = nn.Sequential(
@@ -65,7 +65,7 @@ def initialize_model(Pytorch_file_path):
             return x
 
     # Instantiate the model
-    model = MNIST_CNN(input_shape=1,
+    model = TinyVGG(input_shape=1,
                         output_shape=10,
                         hidden_units=10).to(device)
     
